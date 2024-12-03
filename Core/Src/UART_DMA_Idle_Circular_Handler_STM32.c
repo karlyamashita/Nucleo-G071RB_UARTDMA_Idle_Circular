@@ -60,17 +60,18 @@ void UART_DMA_ParseCircularBuffer(UART_DMA_QueueStruct *msg)
 uint32_t UART_DMA_GetSize(UART_DMA_QueueStruct *msg, uint32_t Size)
 {
 	uint32_t size = 0;
+	uint32_t ptr = Size; // rename Size to ptr so it's easier to understand this code
 
-	if(Size < msg->rx.dma_ptrLast)
+	if(ptr < msg->rx.dma_ptrLast)
 	{
-		size = (DMA_BUFFER_SIZE - msg->rx.dma_ptrLast) + Size;
+		size = (DMA_BUFFER_SIZE - msg->rx.dma_ptrLast) + ptr;
 	}
 	else
 	{
-		size = Size - msg->rx.dma_ptrLast;
+		size = ptr - msg->rx.dma_ptrLast;
 	}
 
-	msg->rx.dma_ptrLast = Size; // update the pointer
+	msg->rx.dma_ptrLast = ptr; // update the pointer
 
 	return size;
 }
@@ -181,7 +182,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 
 	if(huart == uart2_msg.huart)
 	{
-		size = DMA_GetSize(&uart2_msg, Size);
+		size = UART_DMA_GetSize(&uart2_msg, Size);
 
 		for(i = 0; i < size; i++)
 		{
