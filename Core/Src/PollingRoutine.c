@@ -23,41 +23,6 @@
             // USER CODE BEGIN 3
         }
         // USER CODE END 3
-
-
-
-	Description: The STM32 communicates with the LTM4686 by I2C. The STM32 receives UART2 commands to change the VOUT Command and other registers.
-				Timer interrupt initiates the ADC sequencer to get the ADC values for LTM4686_Sns and OP_Sns. The ADC values are
-				calculated and added to the telemetry packet. The I_OCD pins are monitored and added to the telemetry packet as fault bit.
-				The Telemetry packet gets sent every 10ms over UART1.
-
-	Notes on Bootloader FW:
-				The Bootloader takes ~32K of memory if not optimized.
-				We use optimization to reduce bootloader code, so we can use address 0x08007000 - 0x8008000 which is freed up memory.
-				We can use this freed up memory for saving data like serial number, part number, etc., read/written by application FW.
-				This memory section is not erased during FW update so stays persistent.
-
-	Notes on Application FW:
-				The application starts at address 0x8008000.
-
-				User will need to modify system_stm32g0xx.c file. This is an IMPORTANT step else application won't run.
-				1. Un-comment #define USER_VECT_TAB_ADDRESS (line 117)
-				2. Modify VECT_TAB_OFFSET to 0x08008000 (line 131)
-
-				User will need to modify STM32G071RBTX_FLASH.ld file. This keeps the compiler from using the bootloader memory space
-				for the application.
-				1. In MEMORY definition, modify FLASH Origin to 0x08008000 and LENGTH to 96K
-
-
-	Nucleo-G071RB: I2C2
-				PA12 (SCL) - CN10.12
-				PA11 (SDA) - CN10.14
-				GND - CN10.20
-
-	Versions:
-		1.0.1 (9/21/2024) estimated start project -
-
-
  */
 
 
