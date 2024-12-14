@@ -34,14 +34,14 @@
 void PollingInit(void);
 void PollingRoutine(void);
 
-void UART_Parse(UART_DMA_QueueStruct *msg);
+void UART_Parse(UART_DMA_Struct_t *msg);
 int ParseGet(char *msg, char *retStr);
 int ParseSet(char *msg);
 
 void MCU_Prompt(void);
 
-void PrintError(UART_DMA_QueueStruct *msg, char *msg_copy, uint32_t error);
-void PrintReply(UART_DMA_QueueStruct *msg, char *msg_copy, char *msg2);
+void PrintError(UART_DMA_Struct_t *msg, char *msg_copy, uint32_t error);
+void PrintReply(UART_DMA_Struct_t *msg, char *msg_copy, char *msg2);
 
 void GPIO_LED_Green_Toggle(void);
 

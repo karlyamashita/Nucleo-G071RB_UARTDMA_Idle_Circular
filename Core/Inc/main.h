@@ -48,7 +48,7 @@ extern "C" {
 #include "TimerCallback.h"
 #include "PollingRoutine.h"
 
-extern UART_DMA_QueueStruct uart2_msg;
+extern UART_DMA_Struct_t uart2_msg;
 extern TimerCallbackStruct timerCallback;
 
 /* USER CODE END Includes */

@@ -37,12 +37,11 @@ extern UART_HandleTypeDef huart2;
 
 
 // UART2 for Command
-UART_DMA_QueueStruct uart2_msg =
+UART_DMA_Struct_t uart2_msg =
 {
 	.huart = &huart2,
 	.rx.queueSize = UART_DMA_QUEUE_SIZE,
-	.tx.queueSize = UART_DMA_QUEUE_SIZE,
-	.rx.dma_ptr.SkipOverFlow = true
+	.tx.queueSize = UART_DMA_QUEUE_SIZE
 };
 
 
@@ -78,14 +77,14 @@ void PollingRoutine(void)
 /*
  * Description: Parse Command messages.
  */
-void UART_Parse(UART_DMA_QueueStruct *msg)
+void UART_Parse(UART_DMA_Struct_t *msg)
 {
 	int status = 0;
 	char *ptr;
 	char retStr[128] = "OK";
 	char msg_copy[128] = {0};
 
-	if(UART_DMA_MsgRdy(msg))
+	if(UART_DMA_RxMsgRdy(msg))
 	{
 		Nop();
 
@@ -126,7 +125,7 @@ void UART_Parse(UART_DMA_QueueStruct *msg)
 			PrintReply(msg, msg_copy, retStr);
 		}
 
-		memset(&msg->rx.msgToParse->data, 0, UART_DMA_DATA_SIZE); // clear current buffer index
+		memset(&msg->rx.msgToParse->data, 0, UART_DMA_QUEUE_DATA_SIZE); // clear current buffer index
 	}
 }
 
@@ -191,7 +190,7 @@ void MCU_Prompt(void)
  * Output: none
  * Return: none
  */
-void PrintError(UART_DMA_QueueStruct *msg, char *msg_copy, uint32_t error)
+void PrintError(UART_DMA_Struct_t *msg, char *msg_copy, uint32_t error)
 {
 	char str[64] = {0};
 
@@ -209,7 +208,7 @@ void PrintError(UART_DMA_QueueStruct *msg, char *msg_copy, uint32_t error)
  * Output: none
  * Return: none
  */
-void PrintReply(UART_DMA_QueueStruct *msg, char *msg_copy, char *msg2)
+void PrintReply(UART_DMA_Struct_t *msg, char *msg_copy, char *msg2)
 {
 	strcat(msg_copy, "=");
 	strcat(msg_copy, msg2);
